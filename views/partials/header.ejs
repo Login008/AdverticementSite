@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Доска объявлений</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Главная</a> <!-- Добавленная кнопка -->
+      
+      <% if (typeof userId !== 'undefined') { %>
+        <a href="/users/<%= userId %>">Мой профиль</a>
+        <form action="/auth/logout" method="post">
+          <button type="submit">Выйти</button>
+        </form>
+      <% } else { %>
+        <a href="/auth/login">Войти</a>
+        <a href="/auth/register">Регистрация</a>
+      <% } %>
+    </nav>
+  </header>

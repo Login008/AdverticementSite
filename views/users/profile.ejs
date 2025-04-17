@@ -1,0 +1,20 @@
+<%- include('../partials/header') %>
+  <main>
+    <h1>Профиль <%= user.Username %></h1>
+    <p>Email: <%= user.Email %></p>
+    <p>Рейтинг: <%= user.AvgRating || 'Нет оценок' %></p>
+
+    <% if (userId == user.UserID) { %>
+      <a href="/users/<%= user.UserID %>/edit">Редактировать профиль</a>
+    <% } %>
+
+    <h2>Мои объявления</h2>
+    <% ads.forEach(ad => { %>
+      <div class="ad">
+        <h3><%= ad.Title %></h3>
+        <p><%= ad.Description %></p>
+        <p>Цена: <%= ad.Price %> руб.</p>
+      </div>
+    <% }) %>
+  </main>
+<%- include('../partials/footer') %>

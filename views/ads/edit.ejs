@@ -1,0 +1,54 @@
+<%- include('../partials/header', { userId, csrfToken }) %>
+<main>
+  <h1>Редактирование объявления</h1>
+  <% if (typeof error !== 'undefined') { %>
+    <div class="error"><%= error %></div>
+  <% } %>
+  <form action="/ads/<%= ad.AdID %>/edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    
+    <div class="form-group">
+      <label>Заголовок *</label>
+      <input type="text" name="title" value="<%= ad.Title %>" required>
+    </div>
+
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea name="description" rows="5"><%= ad.Description %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Цена *</label>
+      <input type="number" name="price" step="0.01" value="<%= ad.Price %>" required>
+    </div>
+
+    <div class="form-group">
+      <label>Изображение</label>
+      <% if (ad.ImagePath) { %>
+        <img src="/uploads/<%= ad.ImagePath %>" width="200">
+        <label class="delete-image">
+          <input type="checkbox" name="deleteImage"> Удалить изображение
+        </label>
+      <% } %>
+      <input type="file" name="image" accept="image/*">
+    </div>
+
+    <fieldset class="categories">
+      <legend>Категории</legend>
+      <% categories.forEach(category => { %>
+        <label class="category-checkbox">
+          <input 
+            type="checkbox" 
+            name="categories" 
+            value="<%= category.CategoryID %>"
+            <%= category.Selected ? 'checked' : '' %>
+          >
+          <%= category.Name %>
+        </label>
+      <% }) %>
+    </fieldset>
+
+    <button type="submit" class="btn-primary">Сохранить</button>
+  </form>
+</main>
+<%- include('../partials/footer') %>

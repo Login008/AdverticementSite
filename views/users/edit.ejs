@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+  <main>
+    <h1>Редактирование профиля</h1>
+    
+    <% if (typeof error !== 'undefined') { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <form action="/users/<%= user.UserID %>/edit" method="POST">
+      <div>
+        <label>Email:</label>
+        <input 
+          type="email" 
+          name="email" 
+          value="<%= user.Email %>"
+          required
+          pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+          title="Введите корректный email"
+        >
+      </div>
+
+      <div>
+        <label>Старый пароль (оставьте пустым, если не меняется):</label>
+        <input type="password" name="oldPassword">
+      </div>
+
+      <div>
+        <label>Новый пароль:</label>
+        <input 
+          type="password" 
+          name="newPassword"
+          minlength="6"
+          title="Не менее 6 символов"
+        >
+      </div>
+
+      <button type="submit">Сохранить</button>
+    </form>
+  </main>
+<%- include('../partials/footer') %>

@@ -1,0 +1,73 @@
+<%- include('../partials/header', { userId }) %>
+  <main class="container">
+    <div class="actions">
+      <h1>Все объявления</h1>
+      <a href="/ads/create" class="button">Новое объявление</a>
+    </div>
+
+    <!-- Фильтры -->
+    <form class="filters" action="/ads" method="GET">
+      <input type="text" name="q" placeholder="Поиск..." value="<%= query.q || '' %>">
+      <select name="category">
+        <option value="">Все категории</option>
+        <% categories.forEach(cat => { %>
+          <option 
+            value="<%= cat.CategoryID %>" 
+            <%= query.category == cat.CategoryID ? 'selected' : '' %>
+          ><%= cat.Name %></option>
+        <% }) %>
+      </select>
+      <input type="number" name="minPrice" placeholder="Мин. цена" value="<%= query.minPrice || '' %>">
+      <input type="number" name="maxPrice" placeholder="Макс. цена" value="<%= query.maxPrice || '' %>">
+      <button type="submit" class="button">Поиск</button>
+    </form>
+
+    <!-- Список объявлений -->
+    <div class="ads-grid">
+      <% if (ads.length === 0) { %>
+        <p class="empty">Объявлений не найдено 😞</p>
+      <% } else { %>
+        <% ads.forEach(ad => { %>
+          <div class="ad-card">
+            <% if (ad.ImagePath) { %>
+              <img src="/uploads/<%= ad.ImagePath %>" class="ad-image">
+            <% } %>
+            <div class="ad-content">
+              <h3><%= ad.Title %></h3>
+              <p class="price"><%= ad.Price %> ₽</p>
+              <p class="categories"><%= ad.Categories || 'Без категории' %></p>
+              <div class="ad-actions">
+                <a href="/ads/<%= ad.AdID %>" class="button">Подробнее</a>
+                <% if (userId === ad.UserID) { %>
+                  <a href="/ads/<%= ad.AdID %>/edit" class="button">Редактировать</a>
+                  <form action="/ads/<%= ad.AdID %>/delete" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="button danger">Удалить</button>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <!-- Пагинация -->
+	<% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+		<div class="pagination">
+        <% if (currentPage > 1) { %>
+          <a href="?page=<%= currentPage - 1 %>" class="page-link">&laquo; Назад</a>
+        <% } %>
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a 
+            href="?page=<%= i %>" 
+            class="page-link <%= i === currentPage ? 'active' : '' %>"
+          ><%= i %></a>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+          <a href="?page=<%= currentPage + 1 %>" class="page-link">Вперед &raquo;</a>
+        <% } %>
+      </div>
+    <% } %>
+  </main>
+<%- include('../partials/footer') %>

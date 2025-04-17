@@ -1,0 +1,11 @@
+<%- include('../partials/header') %>
+  <main>
+    <h1>Регистрация</h1>
+    <form action="/auth/register" method="post">
+      <input type="text" name="username" placeholder="Логин" required>
+      <input type="email" name="email" placeholder="Email">
+      <input type="password" name="password" placeholder="Пароль" required>
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </main>
+<%- include('../partials/footer') %>
